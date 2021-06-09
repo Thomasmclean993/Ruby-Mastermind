@@ -12,7 +12,9 @@ end
 def color_generator
     4.times.map { COLORS.sample}
 end
-    
+
+
+
 def valid_input(user_input)
     user_input.each do |valid| 
         if  COLORS.include?(valid)
@@ -26,18 +28,14 @@ def valid_input(user_input)
 end
 
 def code_reader(user_input, secret_code)
-    #TODO: Check and see if the colors are contained within the array 
-        if secret_code.eql?(user_input)  
-            puts "Correct, Incredible work"
-        else
-            if user_input.zip(secret_code).map do |x, y| x == y
-                print "[O]"
-            else 
-                print "[x]"
-            end
+    user_input.zip(secret_code).map do |x, y| 
+        if  x == y
+            print "[O]"
+        else 
+            print "[X]"
         end
     end
-end 
+end
 
 
 #TODO: Greg's feedback. Better clear Feedback
@@ -67,16 +65,18 @@ valid_guess = []
 user_guess.push(guess_slot1, guess_slot2, guess_slot3, guess_slot4)
 
 
-#TODO: Take the print method from user_guess and delete from file before push final PR. 
 
 valid_input(user_guess)
-code_reader(user_guess, secret_code)
 
+print user_guess
+print valid_input(user_guess)
+print secret_code
 
-
-# Todo: Need to create a method that generates the random assortment of colors > mods/color_gen.rb
-
-# TODO: THe program will need to be able to compare the color that was guessed to the correct place but be able to recognize the the input string is incorrect. 
-# 
-
-
+if user_guess == secret_code
+    print "congrats, You discovered the secret code"
+else  
+    print "Your wrong but check the hints in the next line below"
+    puts " "
+    print code_reader(user_guess, secret_code)
+    
+end 
