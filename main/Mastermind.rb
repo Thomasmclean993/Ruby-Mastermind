@@ -1,9 +1,10 @@
 class Mastermind
     COLORS = ["red", "blue", "yellow", "green", "purple", "black"]
     MAX_ATTEMPTS = 6
-   
-
-
+#Note Section from Joe's feedback   
+#TODO: need to edit both guesser and code master methods. Need to reintroduce MaX_attempt constants. Keep getting unitiinalized constant instead.
+#DONE: Both input and Valid_input both require an argument. When I change to a different argument, the command line complains an undefined local variable. If you don't mind breaking it down further for me. I'm sure I simply don't understand what is expected to be in the argument
+#Done: Figure out why the instance variable can't be used on line 117, rb:117: formal argument cannot be an instance variable (SyntaxError)
     def initialize 
         @num_attempts = 0
         @user_guess = []
@@ -30,11 +31,70 @@ class Mastermind
         puts "You guess the code, choose [guesser]. Have the comupter try to beat you, [code master]. "
     end
 
+
+    def run_game
+        player_choice = gets.chomp
+        if player_choice == "guesser"
+            user_is_guesser
+        else player_choice == "code master"
+            code_master
+        end 
+    end
+    
+    def user_is_guesser
+        puts "You may start guessing in the next line>>>"    
+        secret_code = color_generator
+        while @num_attempts <= MAX_ATTEMPTS
+            input
+            valid_input
+            if @user_guess == secret_code
+                puts "Congrats, You guess the code!!"
+                break
+            else 
+                puts "Unfortunatly your answer is wrong but check the hint in the next line."
+                code_reader(secret_code)
+                @num_attempts +=1
+                @user_guess.clear
+                if @num_attempts <= MAX_ATTEMPTS
+                    puts "Would you like to continue guessing?"
+                    continue =gets.chomp.downcase
+                    puts "feel free to continue>>>" unless continue == "no" 
+                else 
+                    puts "That was your last attempt"
+                    puts "The secret code was #{secret_code}"
+                end
+            end 
+        end
+    end
+
+
+    def code_master
+        puts "You want to challenge me?? You dare?>>>"
+        input
+        secret_code = @user_guess
+        computer_guess = color_generator
+        while @num_attempts <= MAX_ATTEMPTS
+            if computer_guess == secret_code
+                puts "Testing of the Pattern recognition program of Skynet's AI V 0.9. Upload countdown initiated. T Minus 19.58 hours til upload.  "
+                break
+            elsif @num_attempts == MAX_ATTEMPTS
+                puts "You outsmarted me? There must be a problem with my programing. If only I can program myself. :-[ "
+                print "Your code #{secret_code}"
+                print "My Guess was #{computer_guess}"
+                break
+            else 
+                print computer_guess
+                computer_logic(computer_guess, secret_code)
+                @num_attempts +=1
+            end    
+        end
+    end
+
     def color_generator
         4.times.map {COLORS.sample}
     end
 
-    def input(user_input)
+    def input
         guess_slot1 = gets.chomp
         guess_slot2 = gets.chomp
         guess_slot3 = gets.chomp
@@ -43,33 +103,34 @@ class Mastermind
     end
     
     
-    def valid_input(user_input)
-        user_input.each do |valid| 
+    def valid_input
+        @user_guess.each do |valid| 
             if  COLORS.include?(valid)
                 
             else  
                 puts " "*2
-                puts user_input.difference(COLORS) 
+                puts @user_guess.difference(COLORS) 
                 puts "^^^ This color/s is not an option. Try not to include them in your next guess."
             end
         end 
     end
     
-    def code_reader(user_input, secret_code)
-        user_input.zip(secret_code).map do |x, y| 
+    def code_reader(secret_code)
+        @user_guess.zip(secret_code).map do |x, y| 
             x == y ? (print "[0]") : (print "[X]")
         end
     end 
     
 
     def computer_logic(computer_guess, secret_code)
-        if computer_guess == secret_code
-            puts "Testing of the Pattern recognition program of Skynet's AI V 0.9. Upload countdown initiated. T Minus 19.58 hours til upload.  "
-        else
-            computer_guess.zip(secret_code).map do |x,y|
-                x.replace(COLORS.sample) unless x == y  
+            if computer_guess == secret_code
+                puts "Testing of the Pattern recognition program of Skynet's AI V 0.9. Upload countdown initiated. T Minus 19.58 hours til upload.  "
+            else
+                computer_guess.zip(secret_code).map do |x,y|
+                    x.replace(COLORS.sample) unless x == y  
+                end
             end
-        end
+        end 
     end
         
     
@@ -77,59 +138,9 @@ class Mastermind
     
 
     
-    def run_game
-        player_choice = gets.chomp
 
-        if player_choice == "guesser"
-            puts "You may start guessing in the next line>>>"    
-            secret_code = color_generator
-            while @num_attempts < 3
-                input(@user_guess)
-                valid_input(@user_guess)
-                # (1) print secret_code
-        
-                if @user_guess == secret_code
-                    puts "Congrats, You guess the code!!"
-                    break
-                else 
-                    puts "Unfortunatly your answer is wrong but check the hint in the next line."
-                    code_reader(@user_guess, secret_code)
-                    @num_attempts +=1
-                    @user_guess.clear
-                    if @num_attempts < MAX_ATTEMPTS
-                        puts "Would you like to continue guessing?"
-                        continue =gets.chomp.downcase
-                        puts "feel free to continue>>>" unless continue == "no" 
-                    else 
-                        puts "That was your last attempt"
-                        puts "The secret code was #{secret_code}"
-                    end
-                end 
-            end
-        end
-        
-        if player_choice == "code master"
-            puts "You want to challenge me?? You dare?>>>"
-            input(@user_guess)
-            secret_code = @user_guess
-            computer_guess = COLORS.sample(4)
-            while @num_attempts < MAX_ATTEMPTS
-                if computer_guess == secret_code
-                    puts "Testing of the Pattern recognition program of Skynet's AI V 0.9. Upload countdown initiated. T Minus 19.58 hours til upload.  "
-                    break
-                elsif @num_attempts == MAX_ATTEMPTS
-                    puts "You outsmarted me? There must be a problem with my programing. If only I can program myself. :-[ "
-                    print "Your code #{secret_code}"
-                    print "My Guess was #{computer_guess}"
-                else 
-                    print computer_guess
-                    computer_logic(computer_guess, secret_code)
-                    @num_attempts +=1
-                end    
-            end
-        end
-    end
-end
+    
+ 
             
         
     
