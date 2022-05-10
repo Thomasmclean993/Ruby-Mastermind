@@ -1,9 +1,7 @@
 class Mastermind
     COLORS = ["red", "blue", "yellow", "green", "purple", "black"]
     MAX_ATTEMPTS = 6
-#Note Section from Joe's feedback   
-#TODO: need to edit both guesser and code master methods. Need to reintroduce MaX_attempt constants. Keep getting unitiinalized constant instead.
-#DONE: Both input and Valid_input both require an argument. When I change to a different argument, the command line complains an undefined local variable. If you don't mind breaking it down further for me. I'm sure I simply don't understand what is expected to be in the argument
+#DONE: Both input  Valid_input both require an argument. When I change to a different argument, the command line complains an undefined local variable. If you don't mind breaking it down further for me. I'm sure I simply don't understand what is expected to be in the argument
 #Done: Figure out why the instance variable can't be used on line 117, rb:117: formal argument cannot be an instance variable (SyntaxError)
     def initialize 
         @num_attempts = 0
@@ -78,9 +76,9 @@ class Mastermind
                 puts "Testing of the Pattern recognition program of Skynet's AI V 0.9. Upload countdown initiated. T Minus 19.58 hours til upload.  "
                 break
             elsif @num_attempts == MAX_ATTEMPTS
-                puts "You outsmarted me? There must be a problem with my programing. If only I can program myself. :-[ "
-                print "Your code #{secret_code}"
-                print "My Guess was #{computer_guess}"
+                puts "You outsmarted me? There must be a problem with my programming. If only I can program myself. :-[ "
+                puts "Your code #{secret_code}"
+                puts "My Guess was #{computer_guess}"
                 break
             else 
                 print computer_guess
@@ -130,17 +128,6 @@ class Mastermind
                     x.replace(COLORS.sample) unless x == y  
                 end
             end
-        end 
+        end
     end
-        
-    
-    
-    
 
-    
-
-    
- 
-            
-        
-    
